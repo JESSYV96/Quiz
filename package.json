@@ -1,10 +1,12 @@
 {
-  "name": "clean-test",
+  "name": "quiz",
   "version": "1.0.0",
   "description": "",
   "private": true,
   "scripts": {
-    "dev": "pnpm -F mobile run dev",
+    "dev": "pnpm -F mobile run web",
+    "dev:server": "pnpm -F server run dev",
+    "dev:all": "docker compose up -d && pnpm -F '@jessy/domain' run build && pnpm -F '@jessy/application' run build && pnpm -F '@jessy/infrastructure' run build && pnpm -F server run dev & pnpm -F mobile run web",
     "test": "vitest",
     "build": "pnpm -F '@jessy/domain' run build && pnpm -F '@jessy/application' run build && pnpm -F '@jessy/infrastructure' run build"
   },
