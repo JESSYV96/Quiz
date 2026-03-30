@@ -10,6 +10,7 @@ import AppText from '../../components/themes/Text'
 import { useAppDispatch } from '../../configs/store'
 import QuestionCard from '../../components/quizz/QuestionCard'
 import Themes from 'src/constants/Themes'
+import { useTranslation } from '../../i18n'
 
 interface QuizzScreenProps {
   navigation: any
@@ -39,6 +40,7 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
   const isQuizLoading = useSelector(isQuizLoadingSelector)
 
   const dispatch = useAppDispatch()
+  const t = useTranslation()
 
   useEffect(() => {
     dispatch(getQuestions({ difficulty }))
@@ -65,9 +67,9 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
           <Ionicons name="arrow-back-outline" size={24} color="white" />
         </CircularButton>
         <AppText color="black">
-          Question {currentQuestionIndex + 1}/{totalQuestion}
+          {t.game.question(currentQuestionIndex + 1, totalQuestion)}
         </AppText>
-        <Text>Score: {score}</Text>
+        <Text>{t.game.score(score)}</Text>
       </View>
       <View>
         {isQuizLoading ? <ActivityIndicator color={Themes.colors.primary} /> : <QuestionCard />}

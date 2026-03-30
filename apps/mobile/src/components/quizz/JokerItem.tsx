@@ -1,5 +1,4 @@
-import { StyleSheet, Text, Pressable } from 'react-native'
-import MaterialIcons from '@expo/vector-icons/MaterialIcons'
+import { StyleSheet, Pressable } from 'react-native'
 import React from 'react'
 import Themes from '../../constants/Themes'
 import AppText from '../themes/Text'
@@ -12,7 +11,13 @@ interface JokerItemProps {
 
 const JokerItem = ({ label, icon, onPress }: JokerItemProps) => {
   return (
-    <Pressable onPress={onPress} style={styles.button}>
+    <Pressable
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.button,
+        pressed && styles.buttonPressed,
+      ]}
+    >
       {icon}
       <AppText color="white" size={12}>
         {label}
@@ -26,16 +31,20 @@ export default JokerItem
 const styles = StyleSheet.create({
   button: {
     flex: 1,
-    display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     height: 60,
     padding: 5,
-    borderRadius: 10,
+    borderRadius: 14,
     backgroundColor: Themes.colors.secondary,
-    color: 'white'
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  text: {
-    fontSize: 14
-  }
+  buttonPressed: {
+    opacity: 0.85,
+    transform: [{ scale: 0.96 }],
+  },
 })

@@ -14,6 +14,8 @@ import ScoreboardScreen from './screens/quizz/Scoreboard'
 import MultiplayerSettingsScreen from './screens/multiplayer/Settings'
 import MultiplayerHomeScreen from './screens/multiplayer/Home'
 import RoomListScreen from './screens/multiplayer/RoomList'
+import MultiplayerGameScreen from './screens/multiplayer/MultiplayerGame'
+import MultiplayerScoreboardScreen from './screens/multiplayer/MultiplayerScoreboard'
 
 const MyTheme = {
   ...DefaultTheme,
@@ -33,7 +35,7 @@ export default function App() {
     loaded && (
       <Provider store={store}>
         <NavigationContainer theme={MyTheme}>
-          <Stack.Navigator initialRouteName="MultiplayerHome">
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen
               name="Quizz"
@@ -48,9 +50,11 @@ export default function App() {
               options={{ headerShown: false }}
             />
             <Stack.Screen name="MultiplayerSettings" component={MultiplayerSettingsScreen} />
-            <Stack.Screen name="MultiplayerHome" component={MultiplayerHomeScreen} />
-            <Stack.Screen name="MultiplayerRooms" component={RoomListScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="MultiplayerHome" component={MultiplayerHomeScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="MultiplayerRooms" component={RoomListScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="MultiplayerGame" component={MultiplayerGameScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="MultiplayerScoreboard" component={MultiplayerScoreboardScreen} options={{ headerShown: false }} />
+            <Stack.Screen name="Settings" component={SettingsScreen} options={{ headerShown: false }} />
           </Stack.Navigator>
         </NavigationContainer>
         <StatusBar />
