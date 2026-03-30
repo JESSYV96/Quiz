@@ -7,19 +7,26 @@ interface JokerItemProps {
   label: string
   icon: React.JSX.Element
   onPress: () => void
+  variant?: 'primary' | 'secondary'
 }
 
-const JokerItem = ({ label, icon, onPress }: JokerItemProps) => {
+const JokerItem = ({ label, icon, onPress, variant = 'primary' }: JokerItemProps) => {
+  const isPrimary = variant === 'primary'
+
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
+        isPrimary ? styles.buttonPrimary : styles.buttonSecondary,
         pressed && styles.buttonPressed,
       ]}
     >
       {icon}
-      <AppText color="white" size={12}>
+      <AppText
+        color={isPrimary ? Themes.colors.primary : Themes.colors.secondary}
+        size={11}
+      >
         {label}
       </AppText>
     </Pressable>
@@ -31,20 +38,24 @@ export default JokerItem
 const styles = StyleSheet.create({
   button: {
     flex: 1,
+    flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
-    height: 60,
-    padding: 5,
+    height: 52,
+    gap: 8,
     borderRadius: 14,
-    backgroundColor: Themes.colors.secondary,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 3,
+    borderWidth: 1.5,
+  },
+  buttonPrimary: {
+    backgroundColor: Themes.colors.primary + '10',
+    borderColor: Themes.colors.primary + '30',
+  },
+  buttonSecondary: {
+    backgroundColor: Themes.colors.secondary + '15',
+    borderColor: Themes.colors.secondary + '35',
   },
   buttonPressed: {
-    opacity: 0.85,
+    opacity: 0.75,
     transform: [{ scale: 0.96 }],
   },
 })

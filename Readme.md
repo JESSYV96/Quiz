@@ -4,11 +4,18 @@ Application de quiz multijoueur en temps réel, construite avec une **Clean Arch
 
 ## Apercu
 
+### Solo
 <p align="center">
   <img src="docs/screenshots/home.png" alt="Home" width="200" />
   <img src="docs/screenshots/quiz.png" alt="Quiz" width="200" />
   <img src="docs/screenshots/settings.png" alt="Settings" width="200" />
-  <img src="docs/screenshots/multiplayer.png" alt="Multiplayer" width="200" />
+</p>
+
+### Multijoueur
+<p align="center">
+  <img src="docs/screenshots/multiplayer.png" alt="Multiplayer Home" width="200" />
+  <img src="docs/screenshots/rooms.png" alt="Rooms List" width="200" />
+  <img src="docs/screenshots/room.png" alt="Room Lobby" width="200" />
 </p>
 
 ## Stack technique

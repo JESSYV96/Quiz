@@ -1,5 +1,5 @@
-import { View, StyleSheet, FlatList, Pressable } from 'react-native'
-import React from 'react'
+import { View, StyleSheet, FlatList, Pressable, Animated } from 'react-native'
+import React, { useRef, useEffect } from 'react'
 import JokerItem from './JokerItem'
 import AppText from '../themes/Text'
 import AnswerItem from './AnswerItem'
@@ -26,68 +26,106 @@ const QuestionCard = () => {
   const dispatch = useAppDispatch()
   const t = useTranslation()
 
+  const questionFade = useRef(new Animated.Value(0)).current
+  const questionSlide = useRef(new Animated.Value(20)).current
+
+  useEffect(() => {
+    questionFade.setValue(0)
+    questionSlide.setValue(20)
+    Animated.parallel([
+      Animated.timing(questionFade, {
+        toValue: 1,
+        duration: 350,
+        useNativeDriver: true,
+      }),
+      Animated.spring(questionSlide, {
+        toValue: 0,
+        friction: 8,
+        tension: 50,
+        useNativeDriver: true,
+      }),
+    ]).start()
+  }, [currentQuestion?.label])
+
   const shouldCheckAnswer = (answer: Answer) => {
     return selectedAnswer === answer
   }
 
   return (
-    <View style={styles.questionCard}>
-      <View style={styles.questionContainer}>
+    <View style={styles.root}>
+      {/* Question */}
+      <Animated.View
+        style={[
+          styles.questionBubble,
+          {
+            opacity: questionFade,
+            transform: [{ translateY: questionSlide }],
+          },
+        ]}
+      >
         {currentQuestion && (
-          <AppText color={Themes.colors.text} size={15}>
+          <AppText color={Themes.colors.text} size={16}>
             {currentQuestion.label}
           </AppText>
         )}
-      </View>
-      <View style={{ flex: 1 }}>
+      </Animated.View>
+
+      {/* Answers */}
+      <View style={styles.answersSection}>
         <FlatList
           data={answers}
           contentContainerStyle={styles.answersList}
+          keyExtractor={(item, index) => `${item}-${index}`}
           renderItem={({ item, index }) => (
             <AnswerItem
               text={item}
               letter={String.fromCharCode(65 + index)}
               shouldCheckAnswer={shouldCheckAnswer(item)}
+              index={index}
             />
           )}
         />
-        {!hasAnsweredQuestion ? (
-          <Pressable
-            disabled={!Boolean(selectedAnswer)}
-            onPress={() => dispatch(validateAnswer(selectedAnswer))}
-            style={({ pressed }) => [
-              styles.actionButton,
-              styles.validateButton,
-              !selectedAnswer && styles.actionButtonDisabled,
-              pressed && selectedAnswer && styles.buttonPressed,
-            ]}
-          >
-            <AppText color="white" size={15}>
-              {t.game.validate}
-            </AppText>
-          </Pressable>
-        ) : (
-          <Pressable
-            onPress={() => dispatch(goToNextQuestion())}
-            style={({ pressed }) => [
-              styles.actionButton,
-              styles.nextButton,
-              pressed && styles.buttonPressed,
-            ]}
-          >
-            <View style={styles.nextContent}>
-              <AppText color="white" size={15}>
-                {t.game.next}
-              </AppText>
-              <Ionicons name="arrow-forward" size={18} color="#fff" />
-            </View>
-          </Pressable>
-        )}
       </View>
+
+      {/* Action button */}
+      {!hasAnsweredQuestion ? (
+        <Pressable
+          disabled={!Boolean(selectedAnswer)}
+          onPress={() => dispatch(validateAnswer(selectedAnswer))}
+          style={({ pressed }) => [
+            styles.actionButton,
+            styles.validateButton,
+            !selectedAnswer && styles.actionButtonDisabled,
+            pressed && selectedAnswer && styles.buttonPressed,
+          ]}
+        >
+          <AppText color="white" size={15}>
+            {t.game.validate}
+          </AppText>
+        </Pressable>
+      ) : (
+        <Pressable
+          onPress={() => dispatch(goToNextQuestion())}
+          style={({ pressed }) => [
+            styles.actionButton,
+            styles.nextButton,
+            pressed && styles.buttonPressed,
+          ]}
+        >
+          <View style={styles.nextContent}>
+            <AppText color={Themes.colors.text} size={15}>
+              {t.game.next}
+            </AppText>
+            <Ionicons name="arrow-forward" size={18} color={Themes.colors.text} />
+          </View>
+        </Pressable>
+      )}
+
+      {/* Jokers */}
       <View style={styles.jokersContainer}>
         <JokerItem
           label="50/50"
-          icon={<MaterialIcons name="question-answer" size={22} color="#fff" />}
+          icon={<MaterialIcons name="auto-fix-high" size={18} color={Themes.colors.primary} />}
           onPress={() =>
             dispatch(
               removeIncorrectAnswers({ question: currentQuestion, randomNumber: Math.random() })
@@ -96,10 +134,11 @@ const QuestionCard = () => {
         />
         <JokerItem
           label={t.game.skip}
-          icon={<MaterialIcons name="keyboard-double-arrow-right" size={24} color="#fff" />}
+          icon={<Ionicons name="play-skip-forward" size={18} color={Themes.colors.secondary} />}
           onPress={() => {
             dispatch(skipQuestion())
           }}
+          variant="secondary"
         />
       </View>
     </View>
@@ -109,54 +148,56 @@ const QuestionCard = () => {
 export default QuestionCard
 
 const styles = StyleSheet.create({
-  questionCard: {
-    height: '80%',
-    backgroundColor: '#fff',
-    borderRadius: 20,
-    marginVertical: 20,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 16,
-    elevation: 4,
+  root: {
+    flex: 1,
+    justifyContent: 'space-between',
   },
-  questionContainer: {
+  questionBubble: {
+    backgroundColor: '#fff',
+    borderRadius: 24,
+    padding: 24,
+    minHeight: 120,
     alignItems: 'center',
     justifyContent: 'center',
-    minHeight: 120,
-    marginBottom: 12,
-    padding: 20,
-    borderRadius: 16,
-    backgroundColor: Themes.colors.background,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.06,
+    shadowRadius: 24,
+    elevation: 3,
+  },
+  answersSection: {
+    flex: 1,
+    marginTop: 20,
+    marginBottom: 8,
   },
   answersList: {
-    gap: 8,
+    gap: 10,
   },
   actionButton: {
     alignItems: 'center',
     justifyContent: 'center',
-    paddingVertical: 16,
-    borderRadius: 14,
-    marginTop: 12,
+    paddingVertical: 18,
+    borderRadius: 16,
   },
   validateButton: {
     backgroundColor: Themes.colors.primary,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.15,
+    shadowColor: Themes.colors.primary,
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.3,
     shadowRadius: 12,
     elevation: 6,
   },
   nextButton: {
-    backgroundColor: Themes.colors.secondary,
+    backgroundColor: Themes.colors.secondary + '35',
+    borderWidth: 1.5,
+    borderColor: Themes.colors.secondary + '60',
   },
   actionButtonDisabled: {
-    opacity: 0.4,
+    opacity: 0.35,
   },
   buttonPressed: {
     opacity: 0.85,
-    transform: [{ scale: 0.98 }],
+    transform: [{ scale: 0.97 }],
   },
   nextContent: {
     flexDirection: 'row',
@@ -167,5 +208,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginTop: 12,
+    marginBottom: 4,
   },
 })
