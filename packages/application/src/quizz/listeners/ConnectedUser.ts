@@ -2,10 +2,11 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import { ThunkApi } from '../type'
 
 export const userConnectedListener = createAsyncThunk<
-  any,
-  undefined, // params
+  void,
+  undefined,
   ThunkApi
 >('multiplayer/userConnected', async (_, thunkApi) => {
-  console.log('use case userConnectedListener')
-  return thunkApi.extra.services.multiplayerSocket.userConnected()
+  thunkApi.extra.services.multiplayerSocket.onUserConnected((data) => {
+    console.log('user connected', data)
+  })
 })
