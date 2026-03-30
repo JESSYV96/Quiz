@@ -126,7 +126,7 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
           <View style={styles.scoreBadge}>
             <Ionicons name="star" size={14} color={Themes.colors.secondary} />
             <AppText color={Themes.colors.text} size={13}>
-              {score}
+              {score}/{totalQuestion}
             </AppText>
           </View>
         </View>
