@@ -2,6 +2,15 @@
 
 Application de quiz multijoueur en temps réel, construite avec une **Clean Architecture** en monorepo.
 
+## Apercu
+
+<p align="center">
+  <img src="docs/screenshots/home.png" alt="Home" width="200" />
+  <img src="docs/screenshots/quiz.png" alt="Quiz" width="200" />
+  <img src="docs/screenshots/settings.png" alt="Settings" width="200" />
+  <img src="docs/screenshots/multiplayer.png" alt="Multiplayer" width="200" />
+</p>
+
 ## Stack technique
 
 | Couche | Technologie |
