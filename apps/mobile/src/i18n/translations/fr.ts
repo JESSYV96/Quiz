@@ -1,0 +1,75 @@
+const fr = {
+  home: {
+    subtitle: 'Apprenez en passant\ndu bon temps',
+    playSolo: 'Jouer solo',
+    multiplayer: 'Multijoueur',
+  },
+  settings: {
+    title: 'Réglages',
+    difficulty: 'Difficulté',
+    effect: 'Effet',
+    language: 'Langue',
+  },
+  game: {
+    question: (current: number, total: number) => `Question ${current}/${total}`,
+    score: (score: number) => `Score: ${score}`,
+    validate: 'Valider',
+    next: 'Suivant',
+    skip: 'Passer',
+    loading: 'Chargement...',
+  },
+  scoreboard: {
+    yourScore: 'Votre score',
+    perfect: 'Parfait !',
+    wellPlayed: 'Bien joué !',
+    notBad: 'Pas mal !',
+    tryAgain: 'Vous ferez mieux la prochaine fois !',
+    backToHome: "Retour à l'accueil",
+    playAgain: 'Rejouer',
+  },
+  multiplayer: {
+    title: 'Multijoueur',
+    subtitle: 'Jouez avec vos amis en temps réel',
+    createGame: 'Créer une partie',
+    joinGame: 'Rejoindre une partie',
+    availableRooms: 'Salons disponibles',
+    noRooms: 'Aucun salon disponible',
+    noRoomsHint: 'Créez une partie ou rafraîchissez',
+    room: 'Salon',
+    connected: (count: number) => `${count} joueur(s) connecté(s)`,
+    players: 'Joueurs',
+    player: (index: number) => `Joueur ${index}`,
+    me: '(moi)',
+    admin: 'Admin',
+    waitingPlayers: 'En attente de joueurs...',
+    startGame: 'Lancer la partie',
+    leave: 'Quitter',
+    waitingOthers: (answered: number, total: number) =>
+      `En attente des autres joueurs... (${answered}/${total})`,
+    correctAnswer: 'Bonne réponse',
+    results: 'Résultats',
+    backToHome: "Retour à l'accueil",
+    full: 'Complet',
+    join: 'Rejoindre',
+    playerCount: (current: number, max: number) => `${current}/${max} joueur(s)`,
+    pts: 'pts',
+  },
+  enums: {
+    difficulty: {
+      None: 'Aucune',
+      Easy: 'Facile',
+      Medium: 'Moyen',
+      Hard: 'Difficile',
+    } as Record<string, string>,
+    effect: {
+      None: 'Aucun',
+      Vibration: 'Vibration',
+    } as Record<string, string>,
+    language: {
+      French: 'Français',
+      English: 'Anglais',
+    } as Record<string, string>,
+  },
+} as const
+
+export default fr

@@ -1,4 +1,4 @@
-import { Answer, Difficulty, Effect, Joker, Question } from '@jessy/domain'
+import { Answer, Difficulty, Effect, Language, Joker, Question } from '@jessy/domain'
 import { QuizzState } from './slice'
 
 const questionsSelector = (state: QuizzState): Question[] => {
@@ -58,6 +58,10 @@ const effectSelector = (state: QuizzState): Effect => {
   return state.settings.effect
 }
 
+const languageSelector = (state: QuizzState): Language => {
+  return state.settings.language
+}
+
 export default {
   questionsSelector,
   scoreSelector,
@@ -72,5 +76,6 @@ export default {
   skipQuestionJokerSelector,
   isQuizLoadingSelector,
   difficultySelector,
-  effectSelector
+  effectSelector,
+  languageSelector
 }

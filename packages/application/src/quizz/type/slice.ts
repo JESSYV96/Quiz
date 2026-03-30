@@ -1,9 +1,23 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
-import { Answer, Difficulty, Effect, Errors, Joker, Question, Room } from '@jessy/domain'
+import {
+  Answer,
+  Difficulty,
+  Effect,
+  Language,
+  Errors,
+  Joker,
+  Question,
+  Room,
+  Player,
+  MultiplayerQuestion,
+  QuestionPayload,
+  QuestionResultPayload,
+  GameOverPayload,
+} from '@jessy/domain'
 import { getQuestions } from '../usecases/game/GetQuestions'
 import selectors from './selectors'
 import multiplayerSelectors from '../selectors/multiplayer'
-import { selectDifficulty, selectEffect } from '../usecases/settings'
+import { selectDifficulty, selectEffect, selectLanguage } from '../usecases/settings'
 import {
   selectQuestionMode,
   initQuizz,
@@ -17,14 +31,31 @@ import {
 } from '../usecases/game'
 import { QuizDependencies } from '../../store'
 import { createRoom } from '../usecases/multiplayer/CreateRoom'
-import { getActiveRooms, joinRoom } from '../usecases'
-import { userConnectedListener } from '../listeners'
+import { getActiveRooms } from '../usecases/multiplayer/GetActiveRooms'
+import { joinRoom } from '../usecases/multiplayer/JoinRoom'
+import { multiplayerSubmitAnswer } from '../usecases/multiplayer/SubmitAnswer'
 
 export interface ThunkApi {
   extra: {
     services: QuizDependencies
   }
 }
+
+export type MultiplayerGameState = {
+  status: 'idle' | 'playing' | 'showing-result' | 'finished'
+  currentQuestion: MultiplayerQuestion | null
+  questionIndex: number
+  totalQuestions: number
+  selectedAnswer: string | null
+  hasSubmitted: boolean
+  players: Player[]
+  questionResult: {
+    correctAnswer: string
+    players: Player[]
+  } | null
+  answeredPlayerIds: string[]
+}
+
 export type QuizzState = {
   game: {
     score: number
@@ -45,11 +76,25 @@ export type QuizzState = {
   multiplayer: {
     room: Room | null
     activeRooms: Room[]
+    game: MultiplayerGameState
   }
   settings: {
     difficulty: Difficulty
     effect: Effect
+    language: Language
   }
+}
+
+const initialMultiplayerGame: MultiplayerGameState = {
+  status: 'idle',
+  currentQuestion: null,
+  questionIndex: 0,
+  totalQuestions: 0,
+  selectedAnswer: null,
+  hasSubmitted: false,
+  players: [],
+  questionResult: null,
+  answeredPlayerIds: [],
 }
 
 export const initialState: QuizzState = {
@@ -77,11 +122,13 @@ export const initialState: QuizzState = {
   },
   multiplayer: {
     room: null,
-    activeRooms: []
+    activeRooms: [],
+    game: { ...initialMultiplayerGame },
   },
   settings: {
     difficulty: Difficulty.None,
-    effect: Effect.None
+    effect: Effect.None,
+    language: Language.French
   }
 }
 
@@ -99,6 +146,7 @@ export const quizzSlice = createSlice({
     validateAnswer,
     selectDifficulty,
     selectEffect,
+    selectLanguage,
     initQuizz(state: QuizzState) {
       state.game = { ...initialState.game }
     },
@@ -144,7 +192,66 @@ export const quizzSlice = createSlice({
       if (state.game.currentQuestion.index < state.game.questions.length) {
         state.game.currentQuestion.index += 1
       }
-    }
+    },
+
+    // Multiplayer reducers
+    multiplayerGameStarted(state: QuizzState) {
+      state.multiplayer.game.status = 'playing'
+    },
+    multiplayerNewQuestion(state: QuizzState, action: PayloadAction<QuestionPayload>) {
+      state.multiplayer.game.currentQuestion = action.payload.question
+      state.multiplayer.game.questionIndex = action.payload.questionIndex
+      state.multiplayer.game.totalQuestions = action.payload.totalQuestions
+      state.multiplayer.game.selectedAnswer = null
+      state.multiplayer.game.hasSubmitted = false
+      state.multiplayer.game.answeredPlayerIds = []
+      state.multiplayer.game.questionResult = null
+      state.multiplayer.game.status = 'playing'
+    },
+    multiplayerSelectAnswer(state: QuizzState, action: PayloadAction<string>) {
+      state.multiplayer.game.selectedAnswer = action.payload
+    },
+    multiplayerPlayerAnswered(state: QuizzState, action: PayloadAction<{ playerId: string }>) {
+      if (!state.multiplayer.game.answeredPlayerIds.includes(action.payload.playerId)) {
+        state.multiplayer.game.answeredPlayerIds.push(action.payload.playerId)
+      }
+    },
+    multiplayerQuestionResult(state: QuizzState, action: PayloadAction<QuestionResultPayload>) {
+      state.multiplayer.game.questionResult = {
+        correctAnswer: action.payload.correctAnswer,
+        players: action.payload.players,
+      }
+      state.multiplayer.game.players = action.payload.players
+      state.multiplayer.game.status = 'showing-result'
+    },
+    multiplayerGameOver(state: QuizzState, action: PayloadAction<GameOverPayload>) {
+      state.multiplayer.game.players = action.payload.players
+      state.multiplayer.game.status = 'finished'
+    },
+    multiplayerRoomUpdated(
+      state: QuizzState,
+      action: PayloadAction<{ players: Player[]; userAmount: number }>
+    ) {
+      state.multiplayer.game.players = action.payload.players
+      if (state.multiplayer.room) {
+        state.multiplayer.room.userAmount = action.payload.userAmount
+      }
+    },
+    multiplayerPlayerDisconnected(
+      state: QuizzState,
+      action: PayloadAction<{ userId: string }>
+    ) {
+      state.multiplayer.game.players = state.multiplayer.game.players.filter(
+        (p) => p.id !== action.payload.userId
+      )
+    },
+    multiplayerReset(state: QuizzState) {
+      state.multiplayer.game = { ...initialMultiplayerGame }
+      state.multiplayer.room = null
+    },
+    multiplayerRoomsListUpdated(state: QuizzState, action: PayloadAction<Room[]>) {
+      state.multiplayer.activeRooms = action.payload
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(getQuestions.fulfilled, (state, action) => {
@@ -165,9 +272,8 @@ export const quizzSlice = createSlice({
     builder.addCase(joinRoom.fulfilled, (state, action) => {
       state.multiplayer.room = action.payload
     })
-    builder.addCase(userConnectedListener.fulfilled, (state, action) => {
-      console.log(action.payload, 'userConnectedListener')
-      // state.multiplayer.room = action.payload
+    builder.addCase(multiplayerSubmitAnswer.fulfilled, (state) => {
+      state.multiplayer.game.hasSubmitted = true
     })
   }
 })
