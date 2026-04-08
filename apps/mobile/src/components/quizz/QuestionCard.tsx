@@ -10,7 +10,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { useAppDispatch } from '../../configs/store'
 import { Answer } from '@jessy/domain'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const QuestionCard = () => {
   const { currentQuestionSelector, answersSelector, selectedAnswerSelector, hasAnsweredSelector } =
@@ -24,7 +24,7 @@ const QuestionCard = () => {
   const hasAnsweredQuestion = useSelector(hasAnsweredSelector)
 
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   const questionFade = useRef(new Animated.Value(0)).current
   const questionSlide = useRef(new Animated.Value(20)).current
@@ -100,7 +100,7 @@ const QuestionCard = () => {
           ]}
         >
           <AppText color="white" size={15}>
-            {t.game.validate}
+            {t('game.validate')}
           </AppText>
         </Pressable>
       ) : (
@@ -114,7 +114,7 @@ const QuestionCard = () => {
         >
           <View style={styles.nextContent}>
             <AppText color={Themes.colors.text} size={15}>
-              {t.game.next}
+              {t('game.next')}
             </AppText>
             <Ionicons name="arrow-forward" size={18} color={Themes.colors.text} />
           </View>
@@ -133,7 +133,7 @@ const QuestionCard = () => {
           }
         />
         <JokerItem
-          label={t.game.skip}
+          label={t('game.skip')}
           icon={<Ionicons name="play-skip-forward" size={18} color={Themes.colors.secondary} />}
           onPress={() => {
             dispatch(skipQuestion())
