@@ -10,7 +10,7 @@ import AppText from '../../components/themes/Text'
 import { useAppDispatch } from '../../configs/store'
 import QuestionCard from '../../components/quizz/QuestionCard'
 import Themes from 'src/constants/Themes'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const { width } = Dimensions.get('window')
 
@@ -41,7 +41,7 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
   const isQuizLoading = useSelector(isQuizLoadingSelector)
 
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   const fadeIn = useRef(new Animated.Value(0)).current
   const slideUp = useRef(new Animated.Value(40)).current
@@ -126,7 +126,7 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
           <View style={styles.scoreBadge}>
             <Ionicons name="star" size={14} color={Themes.colors.secondary} />
             <AppText color={Themes.colors.text} size={13}>
-              {score}/{totalQuestion}
+              {score} pts
             </AppText>
           </View>
         </View>
@@ -137,7 +137,7 @@ const QuizzScreen = ({ navigation }: QuizzScreenProps) => {
             <View style={styles.loadingContainer}>
               <ActivityIndicator size="large" color={Themes.colors.primary} />
               <AppText color={Themes.colors.gray} size={13}>
-                {t.game.loading}
+                {t('game.loading')}
               </AppText>
             </View>
           ) : (

@@ -8,14 +8,14 @@ import Themes from '../../constants/Themes'
 import AppText from '../../components/themes/Text'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import { Pressable } from 'react-native'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const ScoreboardScreen = ({ navigation }: any) => {
   const { scoreSelector, totalQuestionSelector } = appSelectors
   const { initQuizz } = appActions
 
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
   const score = useSelector(scoreSelector)
   const total = useSelector(totalQuestionSelector)
 
@@ -59,10 +59,10 @@ const ScoreboardScreen = ({ navigation }: any) => {
 
   const getScoreMessage = () => {
     const ratio = total > 0 ? score / total : 0
-    if (ratio === 1) return t.scoreboard.perfect
-    if (ratio >= 0.7) return t.scoreboard.wellPlayed
-    if (ratio >= 0.4) return t.scoreboard.notBad
-    return t.scoreboard.tryAgain
+    if (ratio === 1) return t('scoreboard.perfect')
+    if (ratio >= 0.7) return t('scoreboard.wellPlayed')
+    if (ratio >= 0.4) return t('scoreboard.notBad')
+    return t('scoreboard.tryAgain')
   }
 
   const getScoreEmoji = () => {
@@ -87,14 +87,14 @@ const ScoreboardScreen = ({ navigation }: any) => {
 
         <Animated.View style={[styles.scoreCard, { opacity: fadeContent }]}>
           <AppText size={14} color={Themes.colors.gray}>
-            {t.scoreboard.yourScore}
+            {t('scoreboard.yourScore')}
           </AppText>
           <View style={styles.scoreRow}>
             <AppText size={48} color={Themes.colors.primary}>
               {score}
             </AppText>
             <AppText size={20} color={Themes.colors.gray}>
-              /{total}
+              pts
             </AppText>
           </View>
           <AppText size={16} color={Themes.colors.text}>
@@ -119,7 +119,7 @@ const ScoreboardScreen = ({ navigation }: any) => {
             <View style={styles.buttonContent}>
               <Ionicons name="home" size={20} color="#fff" />
               <AppText color="white" size={16}>
-                {t.scoreboard.backToHome}
+                {t('scoreboard.backToHome')}
               </AppText>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ffffff90" />
@@ -138,7 +138,7 @@ const ScoreboardScreen = ({ navigation }: any) => {
             <View style={styles.buttonContent}>
               <Ionicons name="refresh" size={20} color={Themes.colors.primary} />
               <AppText color={Themes.colors.primary} size={16}>
-                {t.scoreboard.playAgain}
+                {t('scoreboard.playAgain')}
               </AppText>
             </View>
             <Ionicons name="chevron-forward" size={20} color={Themes.colors.primary + '60'} />
