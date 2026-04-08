@@ -2,7 +2,13 @@
 
 Application de quiz multijoueur en temps réel, construite avec une **Clean Architecture** en monorepo.
 
-## Apercu
+## Démo
+
+<p align="center">
+  <img src="docs/screenshots/quiz-app-demo.gif" alt="Demo" width="300" />
+</p>
+
+## Aperçu
 
 ### Solo
 <p align="center">
