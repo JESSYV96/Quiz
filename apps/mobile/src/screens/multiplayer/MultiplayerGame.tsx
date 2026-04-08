@@ -8,7 +8,7 @@ import Themes from 'src/constants/Themes'
 import { useAppDispatch } from 'src/configs/store'
 import CircularButton from 'src/components/themes/buttons/CircularButton'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const MultiplayerGameScreen = ({ navigation }: any) => {
   const {
@@ -36,7 +36,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
   const room = useSelector(roomSelector)
 
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   useEffect(() => {
     if (gameStatus === 'finished') {
@@ -100,7 +100,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
     return (
       <DefautLayout>
         <View style={styles.loadingContainer}>
-          <AppText>{t.game.loading}</AppText>
+          <AppText>{t('game.loading')}</AppText>
         </View>
       </DefautLayout>
     )
@@ -115,7 +115,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
           <Ionicons name="close" size={24} color="white" />
         </CircularButton>
         <AppText size={14} color={Themes.colors.text}>
-          {t.game.question(questionIndex + 1, totalQuestions)}
+          {t('game.question', { current: questionIndex + 1, total: totalQuestions })}
         </AppText>
         <View style={{ width: 44 }} />
       </View>
@@ -195,7 +195,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
             ]}
           >
             <AppText color="white" size={16}>
-              {t.game.validate}
+              {t('game.validate')}
             </AppText>
           </Pressable>
         )}
@@ -203,7 +203,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
         {gameStatus === 'playing' && hasSubmitted && (
           <View style={styles.waitingBanner}>
             <AppText size={13} color={Themes.colors.gray}>
-              {t.multiplayer.waitingOthers(answeredCount, players.length)}
+              {t('multiplayer.waitingOthers', { answered: answeredCount, total: players.length })}
             </AppText>
           </View>
         )}
@@ -212,7 +212,7 @@ const MultiplayerGameScreen = ({ navigation }: any) => {
           <View style={styles.resultBanner}>
             <Ionicons name="checkmark-circle" size={20} color={Themes.colors.primary} />
             <AppText size={13} color={Themes.colors.primary}>
-              {t.multiplayer.correctAnswer}: {questionResult.correctAnswer}
+              {t('multiplayer.correctAnswer')}: {questionResult.correctAnswer}
             </AppText>
           </View>
         )}

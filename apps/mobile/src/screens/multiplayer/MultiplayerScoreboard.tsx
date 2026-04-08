@@ -7,13 +7,13 @@ import AppText from 'src/components/themes/Text'
 import Themes from 'src/constants/Themes'
 import { useAppDispatch } from 'src/configs/store'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const MultiplayerScoreboardScreen = ({ navigation }: any) => {
   const { multiplayerPlayersSelector } = appSelectors
   const players = useSelector(multiplayerPlayersSelector)
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   const sortedPlayers = [...players].sort((a, b) => b.score - a.score)
 
@@ -61,7 +61,7 @@ const MultiplayerScoreboardScreen = ({ navigation }: any) => {
         </Animated.Text>
 
         <AppText size={24} color={Themes.colors.text}>
-          {t.multiplayer.results}
+          {t('multiplayer.results')}
         </AppText>
 
         <Animated.View style={[styles.listContainer, { opacity: fadeContent }]}>
@@ -94,7 +94,7 @@ const MultiplayerScoreboardScreen = ({ navigation }: any) => {
                   </View>
                   <View style={styles.playerInfo}>
                     <AppText size={14} color={isWinner ? '#fff' : Themes.colors.text}>
-                      {t.multiplayer.player(index + 1)}
+                      {t('multiplayer.player', { index: index + 1 })}
                     </AppText>
                   </View>
                   <View style={[styles.scoreBadge, isWinner && styles.winnerScoreBadge]}>
@@ -102,7 +102,7 @@ const MultiplayerScoreboardScreen = ({ navigation }: any) => {
                       size={16}
                       color={isWinner ? Themes.colors.primary : Themes.colors.primary}
                     >
-                      {item.score} {t.multiplayer.pts}
+                      {item.score} {t('multiplayer.pts')}
                     </AppText>
                   </View>
                 </View>
@@ -121,7 +121,7 @@ const MultiplayerScoreboardScreen = ({ navigation }: any) => {
           <View style={styles.buttonContent}>
             <Ionicons name="home" size={20} color="#fff" />
             <AppText color="white" size={16}>
-              {t.multiplayer.backToHome}
+              {t('multiplayer.backToHome')}
             </AppText>
           </View>
         </Pressable>

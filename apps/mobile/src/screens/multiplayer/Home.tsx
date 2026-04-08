@@ -7,11 +7,11 @@ import { createRoom } from '@jessy/application'
 import DefautLayout from 'src/layouts/DefautLayout'
 import Themes from 'src/constants/Themes'
 import CircularButton from 'src/components/themes/buttons/CircularButton'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const MultiplayerHomeScreen = ({ navigation }: any) => {
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   const fadeTitle = useRef(new Animated.Value(0)).current
   const slideBtn1 = useRef(new Animated.Value(30)).current
@@ -54,10 +54,10 @@ const MultiplayerHomeScreen = ({ navigation }: any) => {
         </Animated.Text>
         <Animated.View style={{ opacity: fadeTitle, alignItems: 'center', gap: 8 }}>
           <AppText size={28} color={Themes.colors.text}>
-            {t.multiplayer.title}
+            {t('multiplayer.title')}
           </AppText>
           <AppText size={13} color={Themes.colors.gray}>
-            {t.multiplayer.subtitle}
+            {t('multiplayer.subtitle')}
           </AppText>
         </Animated.View>
       </View>
@@ -78,7 +78,7 @@ const MultiplayerHomeScreen = ({ navigation }: any) => {
             <View style={styles.buttonContent}>
               <Ionicons name="add-circle" size={22} color="#fff" />
               <AppText color="white" size={16}>
-                {t.multiplayer.createGame}
+                {t('multiplayer.createGame')}
               </AppText>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ffffff90" />
@@ -97,7 +97,7 @@ const MultiplayerHomeScreen = ({ navigation }: any) => {
             <View style={styles.buttonContent}>
               <Ionicons name="enter" size={22} color="#fff" />
               <AppText color="white" size={16}>
-                {t.multiplayer.joinGame}
+                {t('multiplayer.joinGame')}
               </AppText>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ffffff90" />

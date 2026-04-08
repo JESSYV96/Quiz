@@ -1,5 +1,5 @@
+import { useEffect } from 'react'
 import { StatusBar } from 'expo-status-bar'
-import { StyleSheet, Text, View } from 'react-native'
 import { Provider } from 'react-redux'
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
@@ -16,6 +16,7 @@ import MultiplayerHomeScreen from './screens/multiplayer/Home'
 import RoomListScreen from './screens/multiplayer/RoomList'
 import MultiplayerGameScreen from './screens/multiplayer/MultiplayerGame'
 import MultiplayerScoreboardScreen from './screens/multiplayer/MultiplayerScoreboard'
+import './i18n'
 
 const MyTheme = {
   ...DefaultTheme,
@@ -25,8 +26,12 @@ const MyTheme = {
   }
 }
 
+
+
 export default function App() {
   const Stack = createNativeStackNavigator()
+
+
 
   const [loaded, error] = useFonts({
     'Lemon-Milk': require('../assets/fonts/lemon_milk/lemon_milk.otf')
@@ -49,7 +54,7 @@ export default function App() {
               component={ScoreboardScreen}
               options={{ headerShown: false }}
             />
-            <Stack.Screen name="MultiplayerSettings" component={MultiplayerSettingsScreen} />
+            <Stack.Screen name="MultiplayerSettings" component={MultiplayerSettingsScreen} options={{ headerShown: false }} />
             <Stack.Screen name="MultiplayerHome" component={MultiplayerHomeScreen} options={{ headerShown: false }} />
             <Stack.Screen name="MultiplayerRooms" component={RoomListScreen} options={{ headerShown: false }} />
             <Stack.Screen name="MultiplayerGame" component={MultiplayerGameScreen} options={{ headerShown: false }} />

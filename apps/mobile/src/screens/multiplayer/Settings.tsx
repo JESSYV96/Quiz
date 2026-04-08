@@ -9,7 +9,7 @@ import AppText from 'src/components/themes/Text'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import CircularButton from 'src/components/themes/buttons/CircularButton'
 import { Pressable } from 'react-native'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const MultiplayerSettingsScreen = ({ navigation }: any) => {
   const {
@@ -26,7 +26,7 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
   const players = useSelector(multiplayerPlayersSelector)
   const isAdmin = useSelector(isAdminSelector)
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   useEffect(() => {
     dispatch(setupGameListeners())
@@ -68,7 +68,7 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
           <Ionicons name="arrow-back-outline" size={24} color="white" />
         </CircularButton>
         <AppText size={18} color={Themes.colors.text}>
-          {t.multiplayer.room}
+          {t('multiplayer.room')}
         </AppText>
         <View style={{ width: 44 }} />
       </View>
@@ -81,13 +81,13 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
           {room.name}
         </AppText>
         <AppText size={13} color={Themes.colors.gray}>
-          {t.multiplayer.connected(room.userAmount)}
+          {t('multiplayer.connected', { count: room.userAmount })}
         </AppText>
       </View>
 
       <View style={styles.playerSection}>
         <AppText size={15} color={Themes.colors.text}>
-          {t.multiplayer.players}
+          {t('multiplayer.players')}
         </AppText>
         <FlatList
           data={players}
@@ -101,12 +101,12 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
                 </AppText>
               </View>
               <AppText size={14} color={Themes.colors.text}>
-                {t.multiplayer.player(index + 1)}{item.id === room.playerId ? ` ${t.multiplayer.me}` : ''}
+                {t('multiplayer.player', { index: index + 1 })}{item.id === room.playerId ? ` ${t('multiplayer.me')}` : ''}
               </AppText>
               {item.id === room.adminId && (
                 <View style={styles.adminBadge}>
                   <AppText size={10} color={Themes.colors.secondary}>
-                    {t.multiplayer.admin}
+                    {t('multiplayer.admin')}
                   </AppText>
                 </View>
               )}
@@ -119,7 +119,7 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
         <View style={styles.waitingBanner}>
           <ActivityIndicator size="small" color={Themes.colors.primary} />
           <AppText size={13} color={Themes.colors.gray}>
-            {t.multiplayer.waitingPlayers}
+            {t('multiplayer.waitingPlayers')}
           </AppText>
         </View>
       )}
@@ -138,7 +138,7 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
             <View style={styles.buttonContent}>
               <Ionicons name="play" size={22} color="#fff" />
               <AppText color="white" size={16}>
-                {t.multiplayer.startGame}
+                {t('multiplayer.startGame')}
               </AppText>
             </View>
           </Pressable>
@@ -154,7 +154,7 @@ const MultiplayerSettingsScreen = ({ navigation }: any) => {
           <View style={styles.buttonContent}>
             <Ionicons name="exit-outline" size={20} color={Themes.colors.danger} />
             <AppText color={Themes.colors.danger} size={14}>
-              {t.multiplayer.leave}
+              {t('multiplayer.leave')}
             </AppText>
           </View>
         </Pressable>

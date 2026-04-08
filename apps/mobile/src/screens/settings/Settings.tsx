@@ -8,14 +8,14 @@ import { useAppDispatch } from '../../configs/store'
 import Themes from '../../constants/Themes'
 import AppText from '../../components/themes/Text'
 import Ionicons from '@expo/vector-icons/Ionicons'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const SettingsScreen = ({ navigation }: any) => {
   const { difficultySelector, effectSelector, languageSelector } = appSelectors
   const { selectDifficulty, selectEffect, selectLanguage } = appActions
 
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
 
   const difficuly = useSelector(difficultySelector)
   const effect = useSelector(effectSelector)
@@ -28,7 +28,7 @@ const SettingsScreen = ({ navigation }: any) => {
           <Ionicons name="arrow-back" size={22} color={Themes.colors.text} />
         </Pressable>
         <AppText size={20} color={Themes.colors.text}>
-          {t.settings.title}
+          {t('settings.title')}
         </AppText>
         <View style={{ width: 40 }} />
       </View>
@@ -38,7 +38,7 @@ const SettingsScreen = ({ navigation }: any) => {
           <View style={styles.cardHeader}>
             <Ionicons name="speedometer-outline" size={22} color={Themes.colors.primary} />
             <AppText size={15} color={Themes.colors.text}>
-              {t.settings.difficulty}
+              {t('settings.difficulty')}
             </AppText>
           </View>
           <View style={styles.pickerWrapper}>
@@ -50,7 +50,7 @@ const SettingsScreen = ({ navigation }: any) => {
               style={styles.picker}
             >
               {Object.entries(Difficulty).map(([key, value]) => (
-                <Picker.Item key={key} label={t.enums.difficulty[key] ?? key} value={value} />
+                <Picker.Item key={key} label={t(`enums.difficulty.${key}`) ?? key} value={value} />
               ))}
             </Picker>
           </View>
@@ -60,7 +60,7 @@ const SettingsScreen = ({ navigation }: any) => {
           <View style={styles.cardHeader}>
             <Ionicons name="sparkles-outline" size={22} color={Themes.colors.secondary} />
             <AppText size={15} color={Themes.colors.text}>
-              {t.settings.effect}
+              {t('settings.effect')}
             </AppText>
           </View>
           <View style={styles.pickerWrapper}>
@@ -72,7 +72,7 @@ const SettingsScreen = ({ navigation }: any) => {
               style={styles.picker}
             >
               {Object.entries(Effect).map(([key, value]) => (
-                <Picker.Item key={key} label={t.enums.effect[key] ?? key} value={value} />
+                <Picker.Item key={key} label={t(`enums.effect.${key}`) ?? key} value={value} />
               ))}
             </Picker>
           </View>
@@ -82,7 +82,7 @@ const SettingsScreen = ({ navigation }: any) => {
           <View style={styles.cardHeader}>
             <Ionicons name="globe-outline" size={22} color={Themes.colors.primary} />
             <AppText size={15} color={Themes.colors.text}>
-              {t.settings.language}
+              {t('settings.language')}
             </AppText>
           </View>
           <View style={styles.pickerWrapper}>
@@ -94,7 +94,7 @@ const SettingsScreen = ({ navigation }: any) => {
               style={styles.picker}
             >
               {Object.entries(Language).map(([key, value]) => (
-                <Picker.Item key={key} label={t.enums.language[key] ?? key} value={value} />
+                <Picker.Item key={key} label={t(`enums.language.${key}`) ?? key} value={value} />
               ))}
             </Picker>
           </View>

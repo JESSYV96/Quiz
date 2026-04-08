@@ -9,12 +9,12 @@ import AppText from 'src/components/themes/Text'
 import Ionicons from '@expo/vector-icons/Ionicons'
 import CircularButton from 'src/components/themes/buttons/CircularButton'
 import { MULTIPLAYER_QUIZ_REQUIRED_NUMBER } from '@jessy/domain'
-import { useTranslation } from '../../i18n'
+import { useTranslation } from 'react-i18next'
 
 const RoomListScreen = ({ navigation }: any) => {
   const { activeRoomsSelector } = appSelectors
   const dispatch = useAppDispatch()
-  const t = useTranslation()
+  const { t } = useTranslation()
   const activeRooms = useSelector(activeRoomsSelector)
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const RoomListScreen = ({ navigation }: any) => {
           <Ionicons name="arrow-back-outline" size={24} color="white" />
         </CircularButton>
         <AppText size={18} color={Themes.colors.text}>
-          {t.multiplayer.availableRooms}
+          {t('multiplayer.availableRooms')}
         </AppText>
         <CircularButton onPress={() => dispatch(getActiveRooms())}>
           <Ionicons name="refresh" size={22} color="white" />
@@ -48,10 +48,10 @@ const RoomListScreen = ({ navigation }: any) => {
         <View style={styles.emptyState}>
           <AppText size={48}>{'\u{1F50D}'}</AppText>
           <AppText size={16} color={Themes.colors.gray}>
-            {t.multiplayer.noRooms}
+            {t('multiplayer.noRooms')}
           </AppText>
           <AppText size={13} color={Themes.colors.gray}>
-            {t.multiplayer.noRoomsHint}
+            {t('multiplayer.noRoomsHint')}
           </AppText>
         </View>
       ) : (
@@ -84,7 +84,7 @@ const RoomListScreen = ({ navigation }: any) => {
                       {item.name}
                     </AppText>
                     <AppText size={12} color={Themes.colors.gray}>
-                      {t.multiplayer.playerCount(item.userAmount, MULTIPLAYER_QUIZ_REQUIRED_NUMBER)}
+                      {t('multiplayer.playerCount', { current: item.userAmount, max: MULTIPLAYER_QUIZ_REQUIRED_NUMBER })}
                     </AppText>
                   </View>
                 </View>
@@ -98,7 +98,7 @@ const RoomListScreen = ({ navigation }: any) => {
                     size={12}
                     color={isFull ? Themes.colors.gray : Themes.colors.primary}
                   >
-                    {isFull ? t.multiplayer.full : t.multiplayer.join}
+                    {isFull ? t('multiplayer.full') : t('multiplayer.join')}
                   </AppText>
                 </View>
               </Pressable>

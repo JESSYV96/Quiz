@@ -1,18 +1,19 @@
 const fr = {
   home: {
     subtitle: 'Apprenez en passant\ndu bon temps',
-    playSolo: 'Jouer solo',
+    single_player: 'Jouer solo',
     multiplayer: 'Multijoueur',
+    newString: "un nouveau texte"
   },
   settings: {
-    title: 'Réglages',
+    title: '',
     difficulty: 'Difficulté',
     effect: 'Effet',
     language: 'Langue',
   },
   game: {
-    question: (current: number, total: number) => `Question ${current}/${total}`,
-    score: (score: number) => `Score: ${score}`,
+    question: 'Question {{current}}/{{total}}',
+    score: 'Score: {{score}}',
     validate: 'Valider',
     next: 'Suivant',
     skip: 'Passer',
@@ -36,22 +37,21 @@ const fr = {
     noRooms: 'Aucun salon disponible',
     noRoomsHint: 'Créez une partie ou rafraîchissez',
     room: 'Salon',
-    connected: (count: number) => `${count} joueur(s) connecté(s)`,
+    connected: '{{count}} joueur(s) connecté(s)',
     players: 'Joueurs',
-    player: (index: number) => `Joueur ${index}`,
+    player: 'Joueur {{index}}',
     me: '(moi)',
     admin: 'Admin',
     waitingPlayers: 'En attente de joueurs...',
     startGame: 'Lancer la partie',
     leave: 'Quitter',
-    waitingOthers: (answered: number, total: number) =>
-      `En attente des autres joueurs... (${answered}/${total})`,
+    waitingOthers: 'En attente des autres joueurs... ({{answered}}/{{total}})',
     correctAnswer: 'Bonne réponse',
     results: 'Résultats',
     backToHome: "Retour à l'accueil",
     full: 'Complet',
     join: 'Rejoindre',
-    playerCount: (current: number, max: number) => `${current}/${max} joueur(s)`,
+    playerCount: '{{current}}/{{max}} joueur(s)',
     pts: 'pts',
   },
   enums: {
@@ -60,16 +60,16 @@ const fr = {
       Easy: 'Facile',
       Medium: 'Moyen',
       Hard: 'Difficile',
-    } as Record<string, string>,
+    },
     effect: {
       None: 'Aucun',
       Vibration: 'Vibration',
-    } as Record<string, string>,
+    },
     language: {
       French: 'Français',
       English: 'Anglais',
-    } as Record<string, string>,
+    },
   },
-} as const
+}
 
 export default fr

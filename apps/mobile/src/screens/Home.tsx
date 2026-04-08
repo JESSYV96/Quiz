@@ -4,7 +4,7 @@ import Ionicons from '@expo/vector-icons/Ionicons'
 import Themes from '../constants/Themes'
 import DefautLayout from '../layouts/DefautLayout'
 import CircularButton from '../components/themes/buttons/CircularButton'
-import { useTranslation } from '../i18n'
+import { useTranslation } from 'react-i18next'
 
 const { width } = Dimensions.get('window')
 
@@ -13,7 +13,7 @@ interface HomeScreenProps {
 }
 
 const HomeScreen = ({ navigation }: HomeScreenProps) => {
-  const t = useTranslation()
+  const { t } = useTranslation()
   const fadeTitle = useRef(new Animated.Value(0)).current
   const fadeSubtitle = useRef(new Animated.Value(0)).current
   const slideBtn1 = useRef(new Animated.Value(40)).current
@@ -107,8 +107,9 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
         </Animated.Text>
 
         <Animated.Text style={[styles.subtitle, { opacity: fadeSubtitle }]}>
-          {t.home.subtitle}
+          {t('home.subtitle')}
         </Animated.Text>
+
       </View>
 
       {/* Footer */}
@@ -129,7 +130,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           >
             <View style={styles.buttonContent}>
               <Ionicons name="flash" size={22} color="#fff" />
-              <Text style={styles.buttonText}>{t.home.playSolo}</Text>
+              <Text style={styles.buttonText}>{t('home.single_player')}</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ffffff90" />
           </Pressable>
@@ -151,7 +152,7 @@ const HomeScreen = ({ navigation }: HomeScreenProps) => {
           >
             <View style={styles.buttonContent}>
               <Ionicons name="people" size={22} color="#fff" />
-              <Text style={styles.buttonText}>{t.home.multiplayer}</Text>
+              <Text style={styles.buttonText}>{t('home.multiplayer')}</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color="#ffffff90" />
           </Pressable>
